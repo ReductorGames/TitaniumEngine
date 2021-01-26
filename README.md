@@ -1,2 +1,1 @@
-# TitaniumEngine
 ![Logo](logo.png)
