@@ -25,8 +25,9 @@ public class DisplayManager {
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
-			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("Titanium Engine [BETA-0.4.0]");
+			Display.create(new PixelFormat().withSamples(8).withDepthBits(24), attribs);
+			GL11.glEnable(GL13.GL_MULTISAMPLE);
+			Display.setTitle("Titanium Engine [BETA-0.4.1]");
 			GL11.glEnable(GL13.GL_MULTISAMPLE);
 		} catch (LWJGLException e) {
 			e.printStackTrace();

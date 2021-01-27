@@ -146,7 +146,7 @@ public class Terrain {
 	}
 	
 	private float getHeight(int x, int z, BufferedImage image){
-		if(x<0 || x>=image.getHeight() || z<0 || z>=image.getHeight()){
+		if(x < 0 || x >= image.getHeight() || z < 0 || z >= image.getHeight()) {
 			return 0;
 		}
 		float height = image.getRGB(x, z);
@@ -155,6 +155,4 @@ public class Terrain {
 		height *= MAX_HEIGHT;
 		return height;
 	}
-
-	
 }
