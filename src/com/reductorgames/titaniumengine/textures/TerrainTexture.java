@@ -1,14 +1,17 @@
 package com.reductorgames.titaniumengine.textures;
 
 public class TerrainTexture {
+	
+	private int textureID;
 
-    private int textureID;
+	public TerrainTexture(int textureID) {
+		this.textureID = textureID;
+	}
 
-    public TerrainTexture(int textureID) {
-        this.textureID = textureID;
-    }
+	public int getTextureID() {
+		return textureID;
+	}
+	
+	
 
-    public int getTextureID() {
-        return textureID;
-    }
 }

@@ -14,15 +14,16 @@ public class TextureData {
 		this.height = height;
 	}
 	
-	public int getWidth() {
+	public int getWidth(){
 		return width;
 	}
 	
-	public int getHeight() {
+	public int getHeight(){
 		return height;
 	}
 	
-	public ByteBuffer getBuffer() {
+	public ByteBuffer getBuffer(){
 		return buffer;
 	}
+
 }
