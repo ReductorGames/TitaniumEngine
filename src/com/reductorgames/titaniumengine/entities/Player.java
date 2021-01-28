@@ -7,7 +7,10 @@ import com.reductorgames.titaniumengine.terrains.Terrain;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.security.Key;
+
 import static com.reductorgames.titaniumengine.renderEngine.DisplayManager.getFrameTimeSeconds;
+import static org.lwjgl.opengl.GL11.*;
 
 public class Player extends Entity {
 

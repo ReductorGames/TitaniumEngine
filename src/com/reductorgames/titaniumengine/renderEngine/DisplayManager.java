@@ -22,13 +22,12 @@ public class DisplayManager {
 		ContextAttribs attribs = new ContextAttribs(3,2)
 		.withForwardCompatible(true)
 		.withProfileCore(true);
-		
+
 		try {
-			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
+			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat().withSamples(8).withDepthBits(24), attribs);
 			GL11.glEnable(GL13.GL_MULTISAMPLE);
-			Display.setTitle("Titanium Engine [BETA-0.4.1]");
-			GL11.glEnable(GL13.GL_MULTISAMPLE);
+			Display.setTitle("Titanium Engine [BETA-0.4.2]");
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

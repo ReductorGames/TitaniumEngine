@@ -9,6 +9,7 @@ import com.reductorgames.titaniumengine.shaders.StaticShader;
 import com.reductorgames.titaniumengine.shaders.TerrainShader;
 import com.reductorgames.titaniumengine.skybox.SkyboxRenderer;
 import com.reductorgames.titaniumengine.terrains.Terrain;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class MasterRenderer {
 

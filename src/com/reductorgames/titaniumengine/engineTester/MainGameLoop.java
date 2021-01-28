@@ -4,6 +4,9 @@ import com.reductorgames.titaniumengine.entities.Camera;
 import com.reductorgames.titaniumengine.entities.Light;
 import com.reductorgames.titaniumengine.entities.Entity;
 import com.reductorgames.titaniumengine.entities.Player;
+import com.reductorgames.titaniumengine.fontMeshCreator.FontType;
+import com.reductorgames.titaniumengine.fontMeshCreator.GUIText;
+import com.reductorgames.titaniumengine.fontRendering.TextMaster;
 import com.reductorgames.titaniumengine.guis.GuiRenderer;
 import com.reductorgames.titaniumengine.guis.GuiTexture;
 import com.reductorgames.titaniumengine.models.RawModel;
@@ -27,9 +30,11 @@ import com.reductorgames.titaniumengine.water.WaterTile;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +46,11 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
+		TextMaster.init(loader);
+
+		FontType font = new FontType(loader.loadTexture("verdana"), new File("res/verdana.fnt"));
+		GUIText text = new GUIText("Titanium Engine TEST", 1.5f, font, new Vector2f(0f, 0f), 1f, true);
+		text.setColour(1, 0, 0);
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy2"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
@@ -103,8 +113,8 @@ public class MainGameLoop {
 		normalMapEntities.add(entity3);
 
 		Random random = new Random(5666778);
-		for(int i = 0; i < 60; i++) {
-			if(i % 3 == 0) {
+		for (int i = 0; i < 60; i++) {
+			if (i % 3 == 0) {
 				float x = random.nextFloat() * 150;
 				float z = random.nextFloat() * -150;
 				if ((x > 50 && x < 100) || (z < -50 && z > -100)) {
@@ -115,11 +125,11 @@ public class MainGameLoop {
 							random.nextFloat() * 360, 0, 0.9f));
 				}
 			}
-			if(i % 2 == 0) {
+			if (i % 2 == 0) {
 
 				float x = random.nextFloat() * 150;
 				float z = random.nextFloat() * -150;
-				if((x > 50 && x < 100) || (z < -50 && z > -100)) {
+				if ((x > 50 && x < 100) || (z < -50 && z > -100)) {
 
 				} else {
 					float y = terrain.getHeightOfTerrain(x, z);
@@ -179,15 +189,18 @@ public class MainGameLoop {
 			renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, new Vector4f(0, -1, 0, 100000));
 			waterRenderer.render(waters, camera, sun);
 			guiRenderer.render(guiTextures);
+			TextMaster.render();
 
 			DisplayManager.updateDisplay();
 		}
 
+		TextMaster.cleanUp();
 		buffers.cleanUp();
 		waterShader.cleanUp();
 		guiRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
+
 	}
 }
