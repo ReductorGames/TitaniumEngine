@@ -44,7 +44,7 @@ public class WaterRenderer {
 	}
 
 	public void render(List<WaterTile> water, Camera camera, Light sun) {
-		prepareRender(camera, sun);	
+		prepareRender(camera, sun);
 		for (WaterTile tile : water) {
 			Matrix4f modelMatrix = Maths.createTransformationMatrix(
 					new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0,

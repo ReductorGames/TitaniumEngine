@@ -20,12 +20,12 @@ uniform float useFakeLighting;
 uniform float numberOfRows;
 uniform vec2 offset;
 
-const float density = 0;
+const float density = 0.0035;
 const float gradient = 5.0;
 
 uniform vec4 plane;
 
-void main(void){
+void main(void) {
 
 	vec4 worldPosition = transformationMatrix * vec4(position,1.0);
 	
@@ -36,7 +36,7 @@ void main(void){
 	pass_textureCoordinates = (textureCoordinates/numberOfRows) + offset;
 	
 	vec3 actualNormal = normal;
-	if(useFakeLighting > 0.5){
+	if(useFakeLighting > 0.5) {
 		actualNormal = vec3(0.0,1.0,0.0);
 	}
 	
@@ -44,10 +44,9 @@ void main(void){
 	for(int i=0;i<4;i++){
 		toLightVector[i] = lightPosition[i] - worldPosition.xyz;
 	}
-	toCameraVector = (inverse(viewMatrix) * vec4(0.0,0.0,0.0,1.0)).xyz - worldPosition.xyz;
+	toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
 	
 	float distance = length(positionRelativeToCam.xyz);
-	visibility = exp(-pow((distance*density),gradient));
-	visibility = clamp(visibility,0.0,1.0);
-	
+	visibility = exp(-pow((distance * density), gradient));
+	visibility = clamp(visibility, 0.0, 1.0);
 }

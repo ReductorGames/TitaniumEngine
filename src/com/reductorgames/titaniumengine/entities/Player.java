@@ -7,16 +7,14 @@ import com.reductorgames.titaniumengine.terrains.Terrain;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.security.Key;
 
 import static com.reductorgames.titaniumengine.renderEngine.DisplayManager.getFrameTimeSeconds;
-import static org.lwjgl.opengl.GL11.*;
 
 public class Player extends Entity {
 
 	private static final float RUN_SPEED = 40;
 	private static final float TURN_SPEED = 160;
-	private static final float GRAVITY = -50;
+	public static final float GRAVITY = -50;
 	private static final float JUMP_POWER = 18;
 
 	private float currentSpeed = 0;

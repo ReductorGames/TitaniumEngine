@@ -13,6 +13,9 @@ import com.reductorgames.titaniumengine.models.RawModel;
 import com.reductorgames.titaniumengine.models.TexturedModel;
 import com.reductorgames.titaniumengine.normalMappingObjConverter.NormalMappedObjLoader;
 import com.reductorgames.titaniumengine.objConverter.OBJFileLoader;
+import com.reductorgames.titaniumengine.particles.Particle;
+import com.reductorgames.titaniumengine.particles.ParticleMaster;
+import com.reductorgames.titaniumengine.particles.ParticleSystem;
 import com.reductorgames.titaniumengine.renderEngine.DisplayManager;
 import com.reductorgames.titaniumengine.renderEngine.Loader;
 import com.reductorgames.titaniumengine.renderEngine.MasterRenderer;
@@ -27,6 +30,9 @@ import com.reductorgames.titaniumengine.water.WaterRenderer;
 import com.reductorgames.titaniumengine.water.WaterShader;
 import com.reductorgames.titaniumengine.water.WaterTile;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -39,17 +45,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.reductorgames.titaniumengine.renderEngine.DisplayManager.getFPS;
+import static org.lwjgl.input.Keyboard.KEY_A;
+import static org.lwjgl.input.Keyboard.KEY_D;
+
 public class MainGameLoop {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LWJGLException {
 		System.setProperty("org.lwjgl.librarypath", "C:\\TitaniumEngine\\lib\\natives");
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 		TextMaster.init(loader);
+		MasterRenderer renderer = new MasterRenderer(loader);
+		ParticleMaster.init(loader, renderer.getProjectionMatrix());
 
-		FontType font = new FontType(loader.loadTexture("verdana"), new File("res/verdana.fnt"));
-		GUIText text = new GUIText("Titanium Engine TEST", 1.5f, font, new Vector2f(0f, 0f), 1f, true);
+		FontType font = new FontType(loader.loadTexture("arial2"), new File("res/arial2.fnt"));
+		GUIText text = new GUIText("Titanium Engine TEST", 2f, font, new Vector2f(0f, 0f), 1f, true);
 		text.setColour(1, 0, 0);
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy2"));
@@ -144,8 +156,6 @@ public class MainGameLoop {
 		Light sun = new Light(new Vector3f(10000, 10000, -10000), new Vector3f(1.3f, 1.3f, 1.3f));
 		lights.add(sun);
 
-		MasterRenderer renderer = new MasterRenderer(loader);
-
 		RawModel bunnyModel = OBJLoader.loadObjModel("person", loader);
 		TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(
 				loader.loadTexture("playerTexture")));
@@ -164,10 +174,24 @@ public class MainGameLoop {
 		WaterTile water = new WaterTile(75, -75, 0);
 		waters.add(water);
 
+		ParticleSystem system = new ParticleSystem(50, 25, 3, 1, 0.3f);
+		system.randomizeRotation();
+		system.setDirection(new Vector3f(0, 1, 0), 0.1f);
+		system.setLifeError(0.1f);
+		system.setSpeedError(0.4f);
+		system.setScaleError(0.8f);
+
 		while (!Display.isCloseRequested()) {
 			player.move(terrain);
 			camera.move();
 			picker.update();
+
+			ParticleMaster.update();
+
+			if(Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_S)) {
+				system.generateParticles(player.getPosition());
+			}
+
 			entity.increaseRotation(0, 1, 0);
 			entity2.increaseRotation(0, 1, 0);
 			entity3.increaseRotation(0, 1, 0);
@@ -188,12 +212,16 @@ public class MainGameLoop {
 			buffers.unbindCurrentFrameBuffer();
 			renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, new Vector4f(0, -1, 0, 100000));
 			waterRenderer.render(waters, camera, sun);
+
+			ParticleMaster.renderParticles(camera);
+
 			guiRenderer.render(guiTextures);
 			TextMaster.render();
 
 			DisplayManager.updateDisplay();
 		}
 
+		ParticleMaster.cleanUp();
 		TextMaster.cleanUp();
 		buffers.cleanUp();
 		waterShader.cleanUp();
@@ -201,6 +229,5 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
-
 	}
 }

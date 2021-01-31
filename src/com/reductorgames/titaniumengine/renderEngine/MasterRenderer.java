@@ -9,7 +9,6 @@ import com.reductorgames.titaniumengine.shaders.StaticShader;
 import com.reductorgames.titaniumengine.shaders.TerrainShader;
 import com.reductorgames.titaniumengine.skybox.SkyboxRenderer;
 import com.reductorgames.titaniumengine.terrains.Terrain;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -20,17 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class MasterRenderer {
 
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 1000;
 
-	public static final float RED = 0.1f;
-	public static final float GREEN = 0.4f;
-	public static final float BLUE = 0.2f;
+	public static final float RED = 1f;
+	public static final float GREEN = 1f;
+	public static final float BLUE = 1f;
 
 	private Matrix4f projectionMatrix;
 

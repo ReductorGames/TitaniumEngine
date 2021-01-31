@@ -20,7 +20,7 @@ uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
 
-void main(void){
+void main(void) {
 
 	vec4 blendMapColour = texture(blendMap, pass_textureCoordinates);
 	
