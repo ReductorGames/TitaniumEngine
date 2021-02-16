@@ -11,6 +11,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.PixelFormat;
 
+import java.nio.ByteBuffer;
+
 public class DisplayManager {
 
 	public static int recordedFPS;
@@ -25,7 +27,7 @@ public class DisplayManager {
 
 	private static long lastFrameTime;
 	private static float delta;
-	
+
 	public static void createDisplay() throws LWJGLException {
 		ContextAttribs attribs = new ContextAttribs(3,2)
 		.withForwardCompatible(true)
@@ -54,7 +56,7 @@ public class DisplayManager {
 			lastFPS = getCurrentTime();
 			recordedFPS = fps;
 			fps = 0;
-			Display.setTitle("Titanium Engine [BETA-0.4.5]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
+			Display.setTitle("Titanium Engine [BETA-0.4.6]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
 		}
 		fps++;
 

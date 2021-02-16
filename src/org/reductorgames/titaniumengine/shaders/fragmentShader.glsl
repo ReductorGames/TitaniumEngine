@@ -5,8 +5,11 @@ in vec3 surfaceNormal;
 in vec3 toLightVector[4];
 in vec3 toCameraVector;
 in float visibility;
+in vec4 shadowCoords;
 
 out vec4 out_Color;
+
+uniform sampler2D shadowMap;
 
 uniform sampler2D modelTexture;
 uniform vec3 lightColour[4];
@@ -15,7 +18,27 @@ uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
 
+const int pcfCount = 3;
+const float totalTexels = (pcfCount * 2.0 + 1.0) * (pcfCount * 2.0 + 1.0);
+
 void main(void) {
+
+	float mapSize = 80000;
+	float texelSize = 1.0 / mapSize;
+	float total = 0.0;
+
+	for(int x = -pcfCount; x <= pcfCount; x++) {
+		for(int y = -pcfCount; y <= pcfCount; y++) {
+			float objectNearestLight = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
+			if (shadowCoords.z > objectNearestLight + 0.002) {
+				total += 1.0;
+			}
+		}
+	}
+
+	total /= totalTexels;
+
+	float lightFactor = 1.0 - (total * shadowCoords.w);
 
 	vec3 unitNormal = normalize(surfaceNormal);
 	vec3 unitVectorToCamera = normalize(toCameraVector);
@@ -23,7 +46,7 @@ void main(void) {
 	vec3 totalDiffuse = vec3(0.0);
 	vec3 totalSpecular = vec3(0.0);
 	
-	for(int i=0;i<4;i++) {
+	for(int i=0; i < 4; i++) {
 		float distance = length(toLightVector[i]);
 		float attFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
 		vec3 unitLightVector = normalize(toLightVector[i]);	
@@ -37,9 +60,9 @@ void main(void) {
 		totalDiffuse = totalDiffuse + (brightness * lightColour[i])/attFactor;
 		totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColour[i])/attFactor;
 	}
-	totalDiffuse = max(totalDiffuse, 0.2);
-	
-	vec4 textureColour = texture(modelTexture,pass_textureCoordinates);
+	totalDiffuse = max(totalDiffuse * lightFactor, 0.4);
+
+	vec4 textureColour = texture(modelTexture, pass_textureCoordinates);
 	if(textureColour.a < 0.5) {
 		discard;
 	}

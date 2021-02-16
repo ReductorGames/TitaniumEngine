@@ -32,7 +32,7 @@ import java.util.*;
 public class MainGameLoop {
 
 	public static void main(String[] args) throws LWJGLException, FileNotFoundException {
-		System.setProperty("org.lwjgl.librarypath", "D:\\Projects\\TitaniumEngine\\lib\\natives");
+		System.setProperty("org.lwjgl.librarypath", new File("lib/natives").getAbsolutePath());
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
@@ -158,11 +158,11 @@ public class MainGameLoop {
 		entities.add(player);
 
 		int buffer = AudioMaster.loadSound(new File("res/music.wav"));
-		Source source = new Source();
-		source.setLooping(true);
-		source.play(buffer);
-		source.setPosition(0, 0, 0);
-		source.setVolume(0.2f);
+		Source music = new Source();
+		music.setLooping(true);
+		music.play(buffer);
+		music.setPosition(0, 0, 0);
+		music.setVolume(0.05f);
 
 		while (!Display.isCloseRequested()) {
 			player.move(terrain);
@@ -205,7 +205,7 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
-		source.delete();
+		music.delete();
 		AudioMaster.cleanUp();
 	}
 }

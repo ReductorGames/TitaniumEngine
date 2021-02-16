@@ -28,8 +28,8 @@ public class Vertex {
 		tangents.add(tangent);
 	}
 	
-	public void averageTangents(){
-		if(tangents.isEmpty()){
+	public void averageTangents() {
+		if(tangents.isEmpty()) {
 			return;
 		}
 		for(Vector3f tangent : tangents) {

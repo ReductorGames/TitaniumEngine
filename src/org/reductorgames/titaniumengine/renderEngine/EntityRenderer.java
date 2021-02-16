@@ -1,9 +1,11 @@
 package org.reductorgames.titaniumengine.renderEngine;
 
+import org.reductorgames.titaniumengine.entities.Camera;
 import org.reductorgames.titaniumengine.entities.Entity;
 import org.reductorgames.titaniumengine.models.RawModel;
 import org.reductorgames.titaniumengine.models.TexturedModel;
 import org.reductorgames.titaniumengine.shaders.StaticShader;
+import org.reductorgames.titaniumengine.shadows.ShadowMapMasterRenderer;
 import org.reductorgames.titaniumengine.textures.ModelTexture;
 import org.reductorgames.titaniumengine.toolbox.Maths;
 import org.lwjgl.opengl.GL11;
@@ -23,10 +25,12 @@ public class EntityRenderer {
 		this.shader = shader;
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
+		shader.connectTextureUnits();
 		shader.stop();
 	}
 
-	public void render(Map<TexturedModel, List<Entity>> entities) {
+	public void render(Map<TexturedModel, List<Entity>> entities, Matrix4f toShadowSpace) {
+		shader.loadToShadowSpaceMatrix(toShadowSpace);
 		for (TexturedModel model : entities.keySet()) {
 			prepareTexturedModel(model);
 			List<Entity> batch = entities.get(model);
@@ -47,7 +51,7 @@ public class EntityRenderer {
 		GL20.glEnableVertexAttribArray(2);
 		ModelTexture texture = model.getTexture();
 		shader.loadNumberOfRows(texture.getNumberOfRows());
-		if(texture.isHasTransparency()){
+		if(texture.isHasTransparency()) {
 			MasterRenderer.disableCulling();
 		}
 		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
