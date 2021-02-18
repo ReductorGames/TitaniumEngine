@@ -57,7 +57,7 @@ public class DisplayManager {
 			lastFPS = getCurrentTime();
 			recordedFPS = fps;
 			fps = 0;
-			Display.setTitle("Titanium Engine [BETA-0.4.8]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
+			Display.setTitle("Titanium Engine [BETA-0.4.9]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
 		}
 		fps++;
 

@@ -23,12 +23,12 @@ uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
 
-const int pcfCount = 3;
+const int pcfCount = 4;
 const float totalTexels = (pcfCount * 2.0 + 1.0) * (pcfCount * 2.0 + 1.0);
 
 void main(void) {
 
-	float mapSize = 80000;
+	float mapSize = 9096;
 	float texelSize = 1.0 / mapSize;
 	float total = 0.0;
 

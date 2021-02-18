@@ -1,6 +1,5 @@
 package org.reductorgames.titaniumengine.game;
 
-import javafx.geometry.Pos;
 import org.reductorgames.titaniumengine.audioEngine.AudioMaster;
 import org.reductorgames.titaniumengine.audioEngine.Source;
 import org.reductorgames.titaniumengine.entities.*;
@@ -12,7 +11,6 @@ import org.reductorgames.titaniumengine.guis.GuiTexture;
 import org.reductorgames.titaniumengine.models.TexturedModel;
 import org.reductorgames.titaniumengine.normalMappingObjConverter.NormalMappedObjLoader;
 import org.reductorgames.titaniumengine.objConverter.OBJFileLoader;
-import org.reductorgames.titaniumengine.postProcessing.Fbo;
 import org.reductorgames.titaniumengine.postProcessing.PostProcessing;
 import org.reductorgames.titaniumengine.renderEngine.*;
 import org.reductorgames.titaniumengine.terrains.Terrain;
@@ -63,7 +61,7 @@ public class MainGameLoop {
 		Camera camera = new Camera(player);
 		MasterRenderer renderer = new MasterRenderer(loader, camera);
 		FontType font = new FontType(loader.loadTexture("arial2"), new File("res/arial2.fnt"));
-		GUIText text = new GUIText("Titanium Engine TEST", 2f, font, new Vector2f(0f, 0f), 1f, true);
+		GUIText text = new GUIText("Titanium Engine DEMO", 2f, font, new Vector2f(0f, 0f), 1f, true);
 		text.setColour(1, 0, 0);
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy2"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
@@ -111,6 +109,15 @@ public class MainGameLoop {
 		normalMapEntities.add(entity);
 		normalMapEntities.add(entity2);
 		normalMapEntities.add(entity3);
+
+		TexturedModel cherryModel = new TexturedModel(OBJFileLoader.loadOBJ("cherry", loader),
+				new ModelTexture(loader.loadTexture("cherry")));
+		cherryModel.getTexture().setHasTransparency(true);
+		cherryModel.getTexture().setShineDamper(10);
+		cherryModel.getTexture().setReflectivity(0.5f);
+		cherryModel.getTexture().setSpecualrMap(loader.loadTexture("cherryS"));
+		entities.add(new Entity(cherryModel, 1, new Vector3f(60, 10, -25), 0, 0, 0, 10));
+
 		Random random = new Random(5666778);
 		for (int i = 0; i < 60; i++) {
 			if (i % 3 == 0) {
