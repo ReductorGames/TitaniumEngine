@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import org.reductorgames.titaniumengine.bloom.BrightFilter;
+import org.reductorgames.titaniumengine.bloom.CombineFilter;
 import org.reductorgames.titaniumengine.gaussianBlur.HorizontalBlur;
 import org.reductorgames.titaniumengine.gaussianBlur.VerticalBlur;
 import org.reductorgames.titaniumengine.models.RawModel;
@@ -16,18 +18,18 @@ public class PostProcessing {
 	private static final float[] POSITIONS = { -1, 1, -1, -1, 1, 1, 1, -1 };	
 	private static RawModel quad;
 	private static ContrastChanger contrastChanger;
+	private static BrightFilter brightFilter;
 	private static HorizontalBlur hBlur;
 	private static VerticalBlur vBlur;
-	private static HorizontalBlur hBlur2;
-	private static VerticalBlur vBlur2;
+	private static CombineFilter combineFilter;
 
 	public static void init(Loader loader) throws Exception {
 		quad = loader.loadToVAO(POSITIONS, 2);
 		contrastChanger = new ContrastChanger();
-		hBlur = new HorizontalBlur(Display.getWidth() / 8, Display.getHeight() / 8);
-		vBlur = new VerticalBlur(Display.getWidth() / 8, Display.getHeight() / 8);
-		hBlur2 = new HorizontalBlur(Display.getWidth() / 2, Display.getHeight() / 2);
-		vBlur2 = new VerticalBlur(Display.getWidth() / 2, Display.getHeight() / 2);
+		brightFilter = new BrightFilter(Display.getWidth() / 2, Display.getHeight() / 2);
+		hBlur = new HorizontalBlur(Display.getWidth() / 5, Display.getHeight() / 5);
+		vBlur = new VerticalBlur(Display.getWidth() / 5, Display.getHeight() / 5);
+		combineFilter = new CombineFilter();
 		updateFbos();
 	}
 
@@ -36,17 +38,15 @@ public class PostProcessing {
 		contrastChanger = new ContrastChanger();
 		hBlur = new HorizontalBlur(Display.getWidth() / 8, Display.getHeight() / 8);
 		vBlur = new VerticalBlur(Display.getWidth() / 8, Display.getHeight() / 8);
-		hBlur2 = new HorizontalBlur(Display.getWidth() / 2, Display.getHeight() / 2);
-		vBlur2 = new VerticalBlur(Display.getWidth() / 2, Display.getHeight() / 2);
+		combineFilter = new CombineFilter();
 	}
 
-	public static void doPostProcessing(int colourTexture) {
+	public static void doPostProcessing(int colourTexture, int brightTexture) {
 		start();
-		/**hBlur2.render(colourTexture);
-		vBlur2.render(hBlur2.getOutputTexture());
-		hBlur.render(vBlur2.getOutputTexture());
-		vBlur.render(hBlur.getOutputTexture());**/
-		contrastChanger.render(colourTexture/**vBlur.getOutputTexture()**/);
+		//brightFilter.render(colourTexture);
+		hBlur.render(brightTexture);
+		vBlur.render(hBlur.getOutputTexture());
+		combineFilter.render(colourTexture, vBlur.getOutputTexture());
 		end();
 	}
 	
@@ -54,8 +54,7 @@ public class PostProcessing {
 		contrastChanger.cleanUp();
 		vBlur.cleanUp();
 		hBlur.cleanUp();
-		vBlur2.cleanUp();
-		hBlur2.cleanUp();
+		combineFilter.cleanUp();
 	}
 	
 	private static void start() {

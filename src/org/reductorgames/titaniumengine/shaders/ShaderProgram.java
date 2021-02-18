@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -60,6 +61,10 @@ public abstract class ShaderProgram {
 	
 	protected void bindAttribute(int attribute, String variableName) {
 		GL20.glBindAttribLocation(programID, attribute, variableName);
+	}
+
+	protected void bindFragOutPut(int attachment, String variableName) {
+		GL30.glBindFragDataLocation(programID, attachment, variableName);
 	}
 	
 	protected void loadFloat(int location, float value) {

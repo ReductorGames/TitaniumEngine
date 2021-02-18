@@ -10,8 +10,14 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.PixelFormat;
+import org.reductorgames.titaniumengine.audioEngine.AudioMaster;
+import org.reductorgames.titaniumengine.fontRendering.TextMaster;
+import org.reductorgames.titaniumengine.postProcessing.PostProcessing;
 
 import java.nio.ByteBuffer;
+
+import static org.reductorgames.titaniumengine.postProcessing.Fbo.multisampleFbo;
+import static org.reductorgames.titaniumengine.postProcessing.Fbo.outputFbo;
 
 public class DisplayManager {
 
@@ -57,7 +63,7 @@ public class DisplayManager {
 			lastFPS = getCurrentTime();
 			recordedFPS = fps;
 			fps = 0;
-			Display.setTitle("Titanium Engine [BETA-0.4.9]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
+			Display.setTitle("Titanium Engine [BETA-0.5.0]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
 		}
 		fps++;
 
@@ -68,6 +74,8 @@ public class DisplayManager {
 		lastFrameTime = currentFrameTime;
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			closeDisplay();
+			AudioMaster.cleanUp();
+			System.exit(0);
 		}
 	}
 	

@@ -1,4 +1,4 @@
-#version 140
+#version 330
 
 in vec2 pass_textureCoordinates;
 in vec3 surfaceNormal;
@@ -7,7 +7,8 @@ in vec3 toCameraVector;
 in float visibility;
 in vec4 shadowCoords;
 
-out vec4 out_Color;
+layout (location = 0) out vec4 out_Color;
+layout (location = 1) out vec4 out_BrightColor;
 
 uniform sampler2D shadowMap;
 
@@ -50,9 +51,9 @@ void main(void) {
 	float backTextureAmount = 1 - (blendMapColour.r + blendMapColour.g + blendMapColour.b);
 	vec2 tiledCoords = pass_textureCoordinates * 30.0;
 	vec4 backgroundTextureColour = texture(backgroundTexture, tiledCoords) * backTextureAmount;
-	vec4 rTextureColour = texture(rTexture,tiledCoords) * blendMapColour.r;
-	vec4 gTextureColour = texture(gTexture,tiledCoords) * blendMapColour.g;
-	vec4 bTextureColour = texture(bTexture,tiledCoords) * blendMapColour.b;
+	vec4 rTextureColour = texture(rTexture, tiledCoords) * blendMapColour.r;
+	vec4 gTextureColour = texture(gTexture, tiledCoords) * blendMapColour.g;
+	vec4 bTextureColour = texture(bTexture, tiledCoords) * blendMapColour.b;
 	
 	vec4 totalColour = backgroundTextureColour + rTextureColour + gTextureColour + bTextureColour;
 
@@ -80,4 +81,5 @@ void main(void) {
 
 	out_Color =  vec4(totalDiffuse, 1.0) * totalColour + vec4(totalSpecular, 1.0);
 	out_Color = mix(vec4(skyColour, 1.0), out_Color, visibility);
+	out_BrightColor = vec4(0.0);
 }

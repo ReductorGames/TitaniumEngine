@@ -42,6 +42,8 @@ public class StaticShader extends ShaderProgram {
 
 	@Override
 	protected void bindAttributes() {
+		super.bindFragOutPut(0, "out_Color");
+		super.bindFragOutPut(1, "out_BrightColor");
 		super.bindAttribute(0, "position");
 		super.bindAttribute(1, "textureCoordinates");
 		super.bindAttribute(2, "normal");
@@ -81,7 +83,7 @@ public class StaticShader extends ShaderProgram {
 		super.loadInt(location_specularMap, 1);
 	}
 
-	public void loadUsespecularMap(boolean useMap) {
+	public void loadUseSpecularMap(boolean useMap) {
 		super.loadBoolean(location_usesSpecularMap, useMap);
 	}
 

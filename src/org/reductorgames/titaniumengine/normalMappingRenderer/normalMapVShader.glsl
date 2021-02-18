@@ -21,6 +21,7 @@ uniform vec2 offset;
 const float density = 0.0035;
 const float gradient = 5.0;
 
+
 uniform vec4 plane;
 
 void main(void) {
@@ -33,7 +34,7 @@ void main(void) {
 	
 	pass_textureCoordinates = (textureCoordinates / numberOfRows) + offset;
 	
-	vec3 surfaceNormal = (modelViewMatrix * vec4(normal,0.0)).xyz;
+	vec3 surfaceNormal = (modelViewMatrix * vec4(normal, 0.0)).xyz;
 	
 	vec3 norm = normalize(surfaceNormal);
 	vec3 tang = normalize((modelViewMatrix * vec4(tangent, 0.0)).xyz);
@@ -45,12 +46,12 @@ void main(void) {
 		tang.z, bitang.z, norm.z
 	);
 	
-	for(int i=0;i<4;i++) {
+	for(int i=0; i < 4; i++) {
 		toLightVector[i] = toTangentSpace * (lightPositionEyeSpace[i] - positionRelativeToCam.xyz);
 	}
 	toCameraVector = toTangentSpace * (-positionRelativeToCam.xyz);
 	
 	float distance = length(positionRelativeToCam.xyz);
-	visibility = exp(-pow((distance*density),gradient));
-	visibility = clamp(visibility,0.0,1.0);
+	visibility = exp(-pow((distance * density), gradient));
+	visibility = clamp(visibility, 0.0, 1.0);
 }
