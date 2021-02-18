@@ -29,11 +29,12 @@ public class DisplayManager {
 	private static float delta;
 
 	public static void createDisplay() throws LWJGLException {
-		ContextAttribs attribs = new ContextAttribs(3,2)
+		ContextAttribs attribs = new ContextAttribs(3,3)
 		.withForwardCompatible(true)
 		.withProfileCore(true);
 		Display.setResizable(true);
 		Display.setFullscreen(true);
+		Display.setVSyncEnabled(true);
 
 		if(OS_NAME == "windows") {
 			OS_NAME = "Windows";
@@ -41,7 +42,7 @@ public class DisplayManager {
 
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-			Display.create(new PixelFormat().withSamples(8).withDepthBits(24), attribs);
+			Display.create(new PixelFormat().withDepthBits(24), attribs);
 			GL11.glEnable(GL13.GL_MULTISAMPLE);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -56,7 +57,7 @@ public class DisplayManager {
 			lastFPS = getCurrentTime();
 			recordedFPS = fps;
 			fps = 0;
-			Display.setTitle("Titanium Engine [BETA-0.4.6]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
+			Display.setTitle("Titanium Engine [BETA-0.4.8]  |  OS: " + OS_NAME + "  |  FPS: " + getFPS());
 		}
 		fps++;
 
